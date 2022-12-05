@@ -186,6 +186,12 @@ func (ipt *IPTables) Insert(table, chain string, pos int, rulespec ...string) er
 	return ipt.run(cmd...)
 }
 
+// Replace inserts rulespec to specified table/chain (in specified pos)
+func (ipt *IPTables) Replace(table, chain string, pos int, rulespec ...string) error {
+	cmd := append([]string{"-t", table, "-R", chain, strconv.Itoa(pos)}, rulespec...)
+	return ipt.run(cmd...)
+}
+
 // InsertUnique acts like Insert except that it won't insert a duplicate (no matter the position in the chain)
 func (ipt *IPTables) InsertUnique(table, chain string, pos int, rulespec ...string) error {
 	exists, err := ipt.Exists(table, chain, rulespec...)
@@ -487,12 +493,12 @@ func (ipt *IPTables) ClearAndDeleteChain(table, chain string) error {
 	return err
 }
 
-func (ipt *IPTables) ClearAll() error {
-	return ipt.run("-F")
+func (ipt *IPTables) ClearAll(table string) error {
+	return ipt.run("-F", "-t", table)
 }
 
-func (ipt *IPTables) DeleteAll() error {
-	return ipt.run("-X")
+func (ipt *IPTables) DeleteAll(table string) error {
+	return ipt.run("-X", "-t", table)
 }
 
 // ChangePolicy changes policy on chain to target
