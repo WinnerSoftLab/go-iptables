@@ -56,11 +56,11 @@ func (e *Error) IsNotExist() bool {
 }
 
 // Protocol to differentiate between IPv4 and IPv6
-type Protocol byte
+type Protocol int
 
 const (
-	ProtocolIPv4 Protocol = iota
-	ProtocolIPv6
+	ProtocolIPv4 Protocol = 4
+	ProtocolIPv6 Protocol = 6
 )
 
 type IPTables struct {
